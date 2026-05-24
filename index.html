@@ -170,18 +170,19 @@
 
         function moveButton() {
             const noBtn = document.getElementById('no-btn');
-            const container = document.getElementById('main-card');
             
-            noBtn.style.position = 'absolute';
+            // Change to 'fixed' so it uses the whole phone screen
+            noBtn.style.position = 'fixed';
             
-            const cardRect = container.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
             
-            const maxX = cardRect.width - btnRect.width - 40; 
-            const maxY = cardRect.height - btnRect.height - 40;
+            // Calculate boundaries based on the actual screen size
+            const maxX = window.innerWidth - btnRect.width - 20; 
+            const maxY = window.innerHeight - btnRect.height - 20;
             
-            const randomX = Math.floor(Math.random() * maxX) + 20;
-            const randomY = Math.floor(Math.random() * maxY) + 20;
+            // Generate random coordinates
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
             
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
