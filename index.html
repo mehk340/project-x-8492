@@ -59,18 +59,78 @@
 <body>
 
     <script>
-        // Creates the floating background hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-bg');
-            heart.innerHTML = '🤍';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
-            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 7000);
+        // ==========================================
+        // TELEGRAM INSTANT NOTIFICATIONS
+        // ==========================================
+    
+        const BOT_TOKEN = "8864598832:AAHSI-mS9MdqrqK2JsOLSAQ3LkozHeo4E9E";
+        const CHAT_ID = "1301249543";
+    
+        let noCount = 0;
+    
+        // Send Telegram message instantly
+        async function sendTelegram(messageText) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    
+            try {
+                await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: messageText
+                    })
+                });
+            } catch (error) {
+                console.log("Telegram notification failed");
+            }
         }
-        setInterval(createHeart, 400);
+    
+        // Opens the card
+        function openCard() {
+            document.getElementById('front-card').style.display = 'none';
+            document.getElementById('inside-card').style.display = 'block';
+    
+            // Instant Telegram notification
+            sendTelegram("👀 She opened your apology card and is reading it.");
+        }
+    
+        // If she clicks YES
+        function showSuccess() {
+            document.getElementById('inside-card').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+    
+            sendTelegram(
+                `🎉 SHE FORGAVE YOU! She tried clicking NO ${noCount} times.`
+            );
+    
+            // Turn hearts red
+            setInterval(() => {
+                const hearts = document.querySelectorAll('.heart-bg');
+                hearts.forEach(h => h.innerHTML = '❤️');
+            }, 100);
+        }
+    
+        // Running NO button
+        function moveButton() {
+            noCount++;
+    
+            const noBtn = document.getElementById('no-btn');
+            noBtn.style.position = 'fixed';
+    
+            const btnRect = noBtn.getBoundingClientRect();
+    
+            const maxX = window.innerWidth - btnRect.width - 20;
+            const maxY = window.innerHeight - btnRect.height - 20;
+    
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+    
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
     </script>
 
     <div class="card-container" id="main-card">
