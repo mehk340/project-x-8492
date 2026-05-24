@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You 🥺</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heart-bg {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 20px;
+            animation: floatUp 5s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        .card-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.3rem;
+            color: #ff6b81;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-open, .btn-yes {
+            background-color: #ff6b81;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
+        }
+
+        .btn-no {
+            background-color: #f1f2f6;
+            color: #57606f;
+        }
+
+        #inside-card, #success-message {
+            display: none;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-bg');
+            heart.innerHTML = '🤍';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 7000);
+        }
+        setInterval(createHeart, 400);
+    </script>
+
+    <div class="card-container" id="main-card">
+        
+        <div id="front-card">
+            <div class="icon">💌</div>
+            <h1>For My Oldest Friend</h1>
+            <p>I have something important to say. Tap below to open it.</p>
+            <button class="btn-open" onclick="openCard()">Tap to Open</button>
+        </div>
+
+        <div id="inside-card">
+            <h1>I am truly sorry. 😔</h1>
+            <p>I know my joke was completely out of line and I deeply regret hurting you. We lost each other when we were 11, and finding you again after all these years has meant everything to me. I refuse to lose my childhood friend over my own stupid mistake.</p>
+            <p style="font-family: 'Caveat', cursive; font-size: 1.5rem; color: #ff6b81;">Can you forgive me?</p>
+            
+            <div class="btn-container" id="btn-box">
+                <button class="btn-yes" onclick="showSuccess()">Yes</button>
+                <button class="btn-no" id="no-btn" ontouchstart="moveButton()" onclick="moveButton()">No</button>
+            </div>
+        </div>
+
+        <div id="success-message">
+            <div class="icon">🥰</div>
+            <h1>Thank You!</h1>
+            <p>Your friendship means the world to me. I promise to think before I speak from now on. ❤️</p>
+        </div>
+
+    </div>
+
+    <script>
+        function openCard() {
+            document.getElementById('front-card').style.display = 'none';
+            document.getElementById('inside-card').style.display = 'block';
+        }
+
+        function showSuccess() {
+            document.getElementById('inside-card').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            
+            setInterval(() => {
+                const hearts = document.querySelectorAll('.heart-bg');
+                hearts.forEach(h => h.innerHTML = '❤️');
+            }, 100);
+        }
+
+        function moveButton() {
+            const noBtn = document.getElementById('no-btn');
+            const container = document.getElementById('main-card');
+            
+            noBtn.style.position = 'absolute';
+            
+            const cardRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            const maxX = cardRect.width - btnRect.width - 40; 
+            const maxY = cardRect.height - btnRect.height - 40;
+            
+            const randomX = Math.floor(Math.random() * maxX) + 20;
+            const randomY = Math.floor(Math.random() * maxY) + 20;
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+    </script>
+</body>
+</html>
