@@ -6,111 +6,60 @@
     <title>For You 🥺</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; position: relative;
         }
-
         .heart-bg {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 20px;
-            animation: floatUp 5s linear infinite;
-            z-index: 0;
+            position: absolute; color: rgba(255, 255, 255, 0.5); font-size: 20px;
+            animation: floatUp 5s linear infinite; z-index: 0;
         }
-
         @keyframes floatUp {
             0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
             100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
-
         .card-container {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            text-align: center;
-            transition: all 0.5s ease;
+            position: relative; z-index: 10; width: 90%; max-width: 400px;
+            background: rgba(255, 255, 255, 0.95); border-radius: 20px;
+            padding: 30px 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center; transition: all 0.5s ease;
         }
-
         h1 {
-            font-family: 'Caveat', cursive;
-            font-size: 2.3rem;
-            color: #ff6b81;
-            margin-bottom: 15px;
-            line-height: 1.2;
+            font-family: 'Caveat', cursive; font-size: 2.3rem;
+            color: #ff6b81; margin-bottom: 15px; line-height: 1.2;
         }
-
-        p {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
+        p { font-size: 0.95rem; color: #555; margin-bottom: 20px; line-height: 1.6; }
+        
         .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            position: relative;
-            min-height: 50px;
+            display: flex; justify-content: center; gap: 15px;
+            position: relative; min-height: 50px;
         }
-
         button {
-            padding: 12px 25px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: transform 0.2s;
+            padding: 12px 25px; font-family: 'Poppins', sans-serif; font-weight: 600;
+            border: none; border-radius: 25px; cursor: pointer;
+            font-size: 1rem; transition: transform 0.2s;
         }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
+        button:active { transform: scale(0.95); }
         .btn-open, .btn-yes {
-            background-color: #ff6b81;
-            color: white;
+            background-color: #ff6b81; color: white;
             box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
         }
-
-        .btn-no {
-            background-color: #f1f2f6;
-            color: #57606f;
-        }
-
-        #inside-card, #success-message {
-            display: none;
-        }
-
-        .icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
+        .btn-no { background-color: #f1f2f6; color: #57606f; }
+        
+        /* Hidden by default until called by JavaScript */
+        #inside-card, #success-message { display: none; }
+        
+        .icon { font-size: 50px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <script>
+        // Creates the floating background hearts
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart-bg');
@@ -125,7 +74,7 @@
     </script>
 
     <div class="card-container" id="main-card">
-        
+
         <div id="front-card">
             <div class="icon">💌</div>
             <h1>For My Oldest Friend</h1>
@@ -137,7 +86,6 @@
             <h1>I am truly sorry. 😔</h1>
             <p>I know my joke was completely out of line and I deeply regret hurting you. We lost each other when we were 11, and finding you again after all these years has meant everything to me. I refuse to lose my childhood friend over my own stupid mistake.</p>
             <p style="font-family: 'Caveat', cursive; font-size: 1.5rem; color: #ff6b81;">Can you forgive me?</p>
-            
             <div class="btn-container" id="btn-box">
                 <button class="btn-yes" onclick="showSuccess()">Yes</button>
                 <button class="btn-no" id="no-btn" ontouchstart="moveButton()" onclick="moveButton()">No</button>
@@ -153,37 +101,74 @@
     </div>
 
     <script>
+        // ==========================================
+        // WEB3FORMS EMAIL NOTIFICATIONS
+        // ==========================================
+
+        const ACCESS_KEY = "20167ad3-14a1-4447-bd9a-fb66c027586a";
+
+        let noCount = 0;
+
+        // Send email notification silently
+        async function sendNotification(messageText) {
+            try {
+                await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        access_key: ACCESS_KEY,
+                        subject: "Apology Card Update 💌",
+                        from_name: "Apology Card Tracker",
+                        from_email: "mehulkhant1316@gmail.com",
+                        message: messageText
+                    })
+                });
+            } catch (error) {
+                console.log("Notification failed");
+            }
+        }
+
+        // Opens the card
         function openCard() {
             document.getElementById('front-card').style.display = 'none';
             document.getElementById('inside-card').style.display = 'block';
+
+            // Sends notification
+            sendNotification("👀 She opened the apology card and is reading it.");
         }
 
+        // If she clicks YES
         function showSuccess() {
             document.getElementById('inside-card').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
-            
+
+            sendNotification(
+                `🎉 SHE FORGAVE YOU! She tried clicking NO ${noCount} times.`
+            );
+
             setInterval(() => {
                 const hearts = document.querySelectorAll('.heart-bg');
                 hearts.forEach(h => h.innerHTML = '❤️');
             }, 100);
         }
 
+        // Running NO button
         function moveButton() {
+            noCount++;
+
             const noBtn = document.getElementById('no-btn');
-            
-            // Change to 'fixed' so it uses the whole phone screen
             noBtn.style.position = 'fixed';
-            
+
             const btnRect = noBtn.getBoundingClientRect();
-            
-            // Calculate boundaries based on the actual screen size
-            const maxX = window.innerWidth - btnRect.width - 20; 
+
+            const maxX = window.innerWidth - btnRect.width - 20;
             const maxY = window.innerHeight - btnRect.height - 20;
-            
-            // Generate random coordinates
+
             const randomX = Math.max(10, Math.floor(Math.random() * maxX));
             const randomY = Math.max(10, Math.floor(Math.random() * maxY));
-            
+
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
